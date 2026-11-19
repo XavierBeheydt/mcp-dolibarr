@@ -1,0 +1,11 @@
+# Copyright (c) 2026 Beheydt.DEV <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MIT
+# Doc: https://github.com/containers/common/blob/main/docs/containerignore.5.md
+
+*
+!pyproject.toml
+!uv.lock
+!README.md
+!LICENSE
+!src/
+**/__pycache__/
