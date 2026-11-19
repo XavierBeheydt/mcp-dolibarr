@@ -117,6 +117,8 @@ Example, in a Python file:
 Procedures live in `.agents/skills/<name>/SKILL.md`; use the matching one
 instead of improvising the command:
 
+- [dolibarr-api](.agents/skills/dolibarr-api/SKILL.md): check a Dolibarr
+  endpoint, or the API changes of a new Dolibarr release.
 - [python-deps](.agents/skills/python-deps/SKILL.md): install, add or update
   dependencies (uv).
 - [python-format](.agents/skills/python-format/SKILL.md): format with ruff.
@@ -148,7 +150,9 @@ Each addition is listed in [Skills](#skills) in the same change.
 ## New MCP tool
 
 A Dolibarr resource gets its tools in `src/mcp_dolibarr/tools/<resource>.py`,
-registered from `server.py`; read [docs/tools.md](docs/tools.md) first. Keep
+registered from `server.py`; read [docs/tools.md](docs/tools.md) first, and
+check the Dolibarr endpoint in the code of the oldest supported version (see
+the [dolibarr-api](.agents/skills/dolibarr-api/SKILL.md) skill). Keep
 the tool count low: prefer one tool with a `kind` parameter to one tool per
 Dolibarr endpoint, and the `dolibarr_get` / `dolibarr_request` passthrough to
 a tool used once. A new tool is listed in `docs/tools.md` and tested in the

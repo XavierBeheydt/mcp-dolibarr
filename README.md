@@ -11,6 +11,8 @@ An [MCP](https://modelcontextprotocol.io) server for the
 
 ## Dolibarr setup
 
+Dolibarr 24 or later.
+
 1. Enable the **API REST** module (Home → Setup → Modules).
 2. Create a dedicated user, give it only the permissions the agent needs
    (read-only rights for a read-only server), and generate its API key on its
