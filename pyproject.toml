@@ -1,0 +1,29 @@
+# Copyright (c) 2026 Beheydt.DEV <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MIT
+# Doc: https://packaging.python.org/en/latest/specifications/pyproject-toml/
+
+[project]
+name = "mcp-dolibarr"
+version = "0.0.0"
+description = "MCP server for the Dolibarr ERP/CRM REST API"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.15"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

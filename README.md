@@ -16,6 +16,15 @@ Issues and pull requests are welcome.
 
 AI coding agents follow [AGENTS.md](AGENTS.md).
 
+### Development
+
+With [uv](https://docs.astral.sh/uv/):
+
+```sh
+uv sync --extra dev
+uv run ruff format && uv run ruff check && uv run pytest -q
+```
+
 ## License
 
 [MIT](LICENSE)

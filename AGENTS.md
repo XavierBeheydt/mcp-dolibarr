@@ -78,10 +78,10 @@ its check:
 Language-specific rules live in `.agents/instructions/style/<language>.md`;
 read the matching one before editing a file in that language.
 
-Formatting is owned by the language's formatter. `.editorconfig` sets
-indentation and line length only for the file types that have no formatter
-(Markdown): add a section there only for such a type, never for a language
-that has a formatter.
+Formatting is owned by the language's formatter (ruff for Python).
+`.editorconfig` sets indentation and line length only for the file types that
+have no formatter (JSON, TOML, Markdown): add a section there only for such a
+type, never for a language that has a formatter.
 
 ## Header Comment
 
@@ -110,6 +110,11 @@ Example, in a Python file:
 Procedures live in `.agents/skills/<name>/SKILL.md`; use the matching one
 instead of improvising the command:
 
+- [python-deps](.agents/skills/python-deps/SKILL.md): install, add or update
+  dependencies (uv).
+- [python-format](.agents/skills/python-format/SKILL.md): format with ruff.
+- [python-lint](.agents/skills/python-lint/SKILL.md): lint with ruff.
+- [python-test](.agents/skills/python-test/SKILL.md): run tests with pytest.
 - [todo-ai](.agents/skills/todo-ai/SKILL.md): resolve the `TODO-AI` comments,
   grouped, one subagent per group.
 - [vibe](.agents/skills/vibe/SKILL.md): delegate a bounded read-only task to
