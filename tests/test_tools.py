@@ -7,6 +7,16 @@ from conftest import MockDolibarr, call
 pytestmark = pytest.mark.anyio
 
 
+async def test_search_thirdparties_builds_filters(connect, dolibarr: MockDolibarr) -> None:
+    dolibarr.on("GET", "thirdparties", [{"id": "3", "name": "Mairie d'Annecy"}])
+    async with connect() as client:
+        found = await call(client, "search_thirdparties", name="d'Annecy", role="customer")
+    params = dolibarr.last("GET").url.params
+    assert found == [{"id": "3", "name": "Mairie d'Annecy"}]
+    assert params["mode"] == "1"
+    assert params["sqlfilters"] == "((t.nom:like:'%d_Annecy%') or (t.name_alias:like:'%d_Annecy%'))"
+
+
 async def test_get_object_maps_kind_to_endpoint(connect, dolibarr: MockDolibarr) -> None:
     dolibarr.on("GET", "proposals/4", {"id": "4", "ref": "PR2611-0004", "note": None})
     async with connect() as client:

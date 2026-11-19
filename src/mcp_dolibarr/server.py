@@ -6,7 +6,7 @@ from importlib.metadata import version
 from fastmcp import FastMCP
 
 from .client import Dolibarr
-from .tools import system
+from .tools import system, thirdparties
 
 INSTRUCTIONS = """\
 Dolibarr ERP/CRM. Objects have a numeric `id` and a business reference `ref`.
@@ -25,6 +25,6 @@ def build_server(api: Dolibarr, allow_write: bool) -> FastMCP:
         version=version("mcp-dolibarr"),
         instructions=INSTRUCTIONS + ("" if allow_write else READ_ONLY),
     )
-    for module in (system,):
+    for module in (system, thirdparties):
         module.register(mcp, api, allow_write)
     return mcp

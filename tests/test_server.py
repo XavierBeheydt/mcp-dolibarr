@@ -7,8 +7,16 @@ import pytest
 
 pytestmark = pytest.mark.anyio
 
-READ_TOOLS = {"get_status", "get_object", "dolibarr_get"}
-WRITE_TOOLS = {"dolibarr_request"}
+READ_TOOLS = {
+    "get_status",
+    "get_object",
+    "dolibarr_get",
+    "search_thirdparties",
+}
+WRITE_TOOLS = {
+    "dolibarr_request",
+    "create_thirdparty",
+}
 
 
 async def test_read_only_server_has_only_read_tools(connect) -> None:
