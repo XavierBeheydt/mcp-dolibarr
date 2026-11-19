@@ -30,6 +30,11 @@ async def test_list_turns_404_into_empty_list(api: Dolibarr) -> None:
     assert await api.list("invoices") == []
 
 
+async def test_get_keeps_404_as_error(api: Dolibarr) -> None:
+    with pytest.raises(DolibarrError, match="Dolibarr 404"):
+        await api.get("invoices/99")
+
+
 async def test_error_carries_dolibarr_message_and_hint(
     api: Dolibarr, dolibarr: MockDolibarr
 ) -> None:
