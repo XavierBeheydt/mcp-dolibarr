@@ -37,6 +37,9 @@ user: it must be rotated, deleting the commit is not enough.
 This server drives an ERP holding real invoices and customers:
 
 - Tests never reach a real Dolibarr: they mock it (see `tests/conftest.py`).
+- A tool that writes to Dolibarr is registered only when writes are enabled
+  (`DOLIBARR_ALLOW_WRITE`), and carries the matching MCP annotations. Never
+  add a write path that bypasses this switch.
 
 ## Language
 
@@ -141,3 +144,12 @@ binary files), `.gitignore` (generated outputs and caches), and the formatter
 and linter configs of the language.
 
 Each addition is listed in [Skills](#skills) in the same change.
+
+## New MCP tool
+
+A Dolibarr resource gets its tools in `src/mcp_dolibarr/tools/<resource>.py`,
+registered from `server.py`; read [docs/tools.md](docs/tools.md) first. Keep
+the tool count low: prefer one tool with a `kind` parameter to one tool per
+Dolibarr endpoint, and the `dolibarr_get` / `dolibarr_request` passthrough to
+a tool used once. A new tool is listed in `docs/tools.md` and tested in the
+same change.
