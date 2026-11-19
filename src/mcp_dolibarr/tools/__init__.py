@@ -15,6 +15,7 @@ CREATE = ToolAnnotations(read_only_hint=False, destructive_hint=False, open_worl
 IRREVERSIBLE = ToolAnnotations(read_only_hint=False, destructive_hint=True, open_world_hint=False)
 
 ObjectKind = Literal["thirdparty", "contact", "product", "project", "proposal", "order", "invoice"]
+DocumentKind = Literal["proposal", "order", "invoice"]
 
 # The API path of each object kind accepted by `get_object`; the model sees only the kind.
 ENDPOINTS: dict[str, str] = {
@@ -36,6 +37,10 @@ def like(columns: list[str], text: str) -> str:
     # sqlfilters can't escape a quote: the `_` LIKE wildcard stands in for it.
     pattern = text.replace("'", "_")
     return "(" + " or ".join(f"({c}:like:'%{pattern}%')" for c in columns) + ")"
+
+
+def all_of(*filters: str | None) -> str | None:
+    return " and ".join(f for f in filters if f) or None
 
 
 def as_json(data: Any) -> str:

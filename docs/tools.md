@@ -2,7 +2,7 @@
 
 The MCP tools, and the Dolibarr REST conventions they rely on. The server
 also sends the model short instructions (`INSTRUCTIONS` in `server.py`):
-`sqlfilters` syntax.
+`sqlfilters` syntax and status codes.
 
 ## Read
 
@@ -12,6 +12,7 @@ also sends the model short instructions (`INSTRUCTIONS` in `server.py`):
 | `get_object` | `GET <kind>s/{id}` | Full object: thirdparty, contact, product, project, proposal, order, invoice |
 | `search_thirdparties` | `GET thirdparties` | By name or alias, and role (customer, prospect, supplier) |
 | `search_products` | `GET products` | By reference or label, and type (product, service) |
+| `list_documents` | `GET proposals`, `orders`, `invoices` | By third party, status, `sqlfilters` |
 | `dolibarr_get` | `GET <path>` | Any other read |
 
 ## Write (`DOLIBARR_ALLOW_WRITE=true`)
@@ -19,6 +20,9 @@ also sends the model short instructions (`INSTRUCTIONS` in `server.py`):
 | Tool | Dolibarr endpoint | Annotation |
 | --- | --- | --- |
 | `create_thirdparty` | `POST thirdparties` | create |
+| `create_document` | `POST <kind>s`, then `POST <kind>s/{id}/lines` per line | create (draft) |
+| `add_document_line` | `POST <kind>s/{id}/lines` | create |
+| `validate_document` | `POST <kind>s/{id}/validate` | destructive: final reference |
 | `dolibarr_request` | any method and path | destructive |
 
 ## Dolibarr REST conventions
@@ -28,6 +32,8 @@ also sends the model short instructions (`INSTRUCTIONS` in `server.py`):
   `properties` (the fields to return; ignored by old Dolibarr versions).
 - An empty list is a `404`, which the client turns into `[]`.
 - A `POST` that creates an object returns its numeric id.
+- Dates are Unix timestamps; `create_document` sends noon UTC of the given
+  day, so the date is right in any server time zone.
 - `sqlfilters` values sit in single quotes and can't escape one: `like()`
   replaces a quote in the searched text with the `_` wildcard.
 

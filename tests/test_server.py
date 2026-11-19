@@ -13,10 +13,14 @@ READ_TOOLS = {
     "dolibarr_get",
     "search_thirdparties",
     "search_products",
+    "list_documents",
 }
 WRITE_TOOLS = {
     "dolibarr_request",
     "create_thirdparty",
+    "create_document",
+    "add_document_line",
+    "validate_document",
 }
 
 
@@ -33,6 +37,7 @@ async def test_write_tools_are_annotated(connect) -> None:
         tools = {t.name: t.annotations for t in await client.list_tools()}
         assert set(tools) == READ_TOOLS | WRITE_TOOLS
         assert not any(tools[name].read_only_hint for name in WRITE_TOOLS)
+        assert tools["validate_document"].destructive_hint
         assert tools["dolibarr_request"].destructive_hint
         assert "read-only" not in client.instructions
 

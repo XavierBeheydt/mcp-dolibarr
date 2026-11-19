@@ -1,13 +1,18 @@
 # mcp-dolibarr
 
 An [MCP](https://modelcontextprotocol.io) server for the
-[Dolibarr](https://www.dolibarr.org) ERP/CRM REST API.
+[Dolibarr](https://www.dolibarr.org) ERP/CRM REST API: lets Claude, or any MCP
+client, search third parties and products, read proposals, orders and
+invoices, and, when enabled, draft and validate them.
 
 - **Read-only by default.** Write tools only exist when
   `DOLIBARR_ALLOW_WRITE=true`, and carry MCP annotations so the client asks
   before running them.
+- **Few tools.** 11 at most ([docs/tools.md](docs/tools.md)), with a `kind`
+  parameter for proposals, orders and invoices, and a raw passthrough for the
+  rest of the API.
 - **Compact answers.** Lists ask Dolibarr only for summary fields, and empty
-  values are dropped from every answer, to save the model's context. The tools are listed in [docs/tools.md](docs/tools.md).
+  values are dropped from every answer, to save the model's context.
 
 ## Dolibarr setup
 
