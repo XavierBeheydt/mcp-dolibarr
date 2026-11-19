@@ -12,7 +12,7 @@ from mcp_dolibarr.client import Dolibarr
 URL = "https://erp.test/api/index.php"
 
 
-class FakeDolibarr:
+class MockDolibarr:
     """Answers canned responses by (method, path) and records every request."""
 
     def __init__(self) -> None:
@@ -43,10 +43,10 @@ def anyio_backend() -> str:
 
 
 @pytest.fixture
-def dolibarr() -> FakeDolibarr:
-    return FakeDolibarr()
+def dolibarr() -> MockDolibarr:
+    return MockDolibarr()
 
 
 @pytest.fixture
-def api(dolibarr: FakeDolibarr) -> Dolibarr:
+def api(dolibarr: MockDolibarr) -> Dolibarr:
     return Dolibarr(URL, "test-key", httpx.MockTransport(dolibarr.handle))
