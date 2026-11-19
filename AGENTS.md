@@ -34,6 +34,10 @@ git-ignored file (e.g. `.env`), and commit only a placeholder file
 a secret file unless the task needs it. If a secret leaks, stop and tell the
 user: it must be rotated, deleting the commit is not enough.
 
+This server drives an ERP holding real invoices and customers:
+
+- Tests never reach a real Dolibarr: they mock it (see `tests/conftest.py`).
+
 ## Language
 
 English is the language of the repo: code, comments, identifiers, docs,

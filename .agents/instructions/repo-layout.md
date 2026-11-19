@@ -5,8 +5,8 @@ nothing fits, ask instead of adding a top-level directory.
 
 | Path | Content |
 | --- | --- |
-| `src/mcp_dolibarr/` | The package |
-| `tests/` | pytest tests, one `test_<module>.py` per module |
+| `src/mcp_dolibarr/` | The package: `client.py` (Dolibarr REST client) |
+| `tests/` | pytest tests, one `test_<module>.py` per module; Dolibarr is mocked in `conftest.py` |
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
 | `.worktrees/` | Git worktrees, ignored by git (see `repo-workflow.md`) |
 
