@@ -7,6 +7,7 @@ nothing fits, ask instead of adding a top-level directory.
 | --- | --- |
 | `src/mcp_dolibarr/` | The package: `client.py` (Dolibarr REST client) |
 | `tests/` | pytest tests, one `test_<module>.py` per module; Dolibarr is mocked in `conftest.py` |
+| `.github/` | GitHub configuration: `workflows/` (CI, see `ci.yml`) |
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
 | `.worktrees/` | Git worktrees, ignored by git (see `repo-workflow.md`) |
 
