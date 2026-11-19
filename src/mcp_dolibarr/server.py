@@ -6,7 +6,7 @@ from importlib.metadata import version
 from fastmcp import FastMCP
 
 from .client import Dolibarr
-from .tools import system, thirdparties
+from .tools import products, system, thirdparties
 
 INSTRUCTIONS = """\
 Dolibarr ERP/CRM. Objects have a numeric `id` and a business reference `ref`.
@@ -16,7 +16,7 @@ Amounts: `total_ht` excludes tax, `total_ttc` includes it. Dates are Unix timest
 combined with `and` / `or`, e.g. `(t.total_ttc:>:1000) and (t.date_lim_reglement:<:'2026-01-01')`.
 """
 
-MODULES = (system, thirdparties)
+MODULES = (system, thirdparties, products)
 
 READ_ONLY = "\nThis server is read-only: it cannot change anything in Dolibarr.\n"
 
