@@ -84,8 +84,8 @@ read the matching one before editing a file in that language.
 
 Formatting is owned by the language's formatter (ruff for Python).
 `.editorconfig` sets indentation and line length only for the file types that
-have no formatter (JSON, TOML, Markdown): add a section there only for such a
-type, never for a language that has a formatter.
+have no formatter (JSON, TOML, YAML, Markdown): add a section there only for
+such a type, never for a language that has a formatter.
 
 ## Header Comment
 
