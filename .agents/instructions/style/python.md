@@ -11,6 +11,8 @@ Applies to every Python file in the repo.
 - Type hints are mandatory on every function: all parameters and the return
   type.
 - Four spaces for indentation, lines up to 100 characters.
+- In a module, the helper functions come together at the top, after the
+  constants and before the first class.
 - `_name` is module-private. `__name` is for class internals ("protected",
   name-mangled).
 - The body of an `if`, `for` or `while` goes on its own line (PEP 8). A
