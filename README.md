@@ -24,7 +24,7 @@ this server allows.
 ## Configuration
 
 Each setting is an environment variable and, except the API key, a command-line
-option (`--dolibarr-url`, `--mcp-port`... see `mcp-dolibarr --help`). The option
+option (`--url`, `--port`... see `mcp-dolibarr --help`). The option
 wins over the variable, which wins over the `.env` file of the working directory
 (copy `.env.example`), which wins over the default. Keep the API key in the
 environment or in `.env`: an option would show in `ps` and in the shell history.
