@@ -10,7 +10,10 @@ The supported versions and the source file of each endpoint are in the
 
 ## Read an endpoint
 
-At a release tag, e.g. the oldest supported one:
+Every REST module is a class `htdocs/<module>/class/api_<resource>.class.php`;
+the table in `docs/tools.md` maps each endpoint to its file. Thirdparties
+(`societe`) are only the example below. At a release tag, e.g. the oldest
+supported one:
 
 ```sh
 gh api "repos/Dolibarr/dolibarr/contents/htdocs/societe/class/api_thirdparties.class.php?ref=24.0.0" \
@@ -28,8 +31,8 @@ temporary directory:
 ```sh
 cd "$(mktemp -d)" && git init -q
 git fetch -q --depth=1 --filter=blob:none https://github.com/Dolibarr/dolibarr.git tag <old> tag <new>
-git diff --stat <old> <new> -- ':(glob)htdocs/**/class/api_*.class.php'
-git diff <old> <new> -- htdocs/societe/class/api_thirdparties.class.php
+git diff --stat <old> <new> -- ':(glob)htdocs/**/class/api_*.class.php'   # every module
+git diff <old> <new> -- htdocs/societe/class/api_thirdparties.class.php  # one file, in full
 git show <new>:ChangeLog    # the WARNING: section, and the lines naming the API
 ```
 
