@@ -6,8 +6,8 @@ An [MCP](https://modelcontextprotocol.io) server for the
 - **Read-only by default.** Write tools only exist when
   `DOLIBARR_ALLOW_WRITE=true`, and carry MCP annotations so the client asks
   before running them.
-- **Compact answers.** Empty values are dropped from every answer, to save the
-  model's context. The tools are listed in [docs/tools.md](docs/tools.md).
+- **Compact answers.** Lists ask Dolibarr only for summary fields, and empty
+  values are dropped from every answer, to save the model's context. The tools are listed in [docs/tools.md](docs/tools.md).
 
 ## Dolibarr setup
 

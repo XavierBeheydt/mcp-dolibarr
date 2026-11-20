@@ -8,6 +8,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `src/mcp_dolibarr/` | The package: `config.py` (settings: command line, environment and `.env`), `client.py` (Dolibarr REST client), `server.py` (MCP server and tool registration), `__main__.py` (entry point) |
 | `src/mcp_dolibarr/tools/` | MCP tools, one module per Dolibarr resource, each with a `register()` function |
 | `tests/` | pytest tests, one `test_<module>.py` per module; Dolibarr is mocked in `conftest.py` |
+| `tests/tools/` | The tests of the MCP tools, one `test_<resource>.py` per `src/mcp_dolibarr/tools/<resource>.py` |
 | `docs/` | Documentation (Markdown); no plans or roadmaps, those live in issues |
 | `.github/` | GitHub configuration: `workflows/` (CI, see `ci.yml`) |
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |

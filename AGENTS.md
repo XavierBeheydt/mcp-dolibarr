@@ -155,5 +155,5 @@ check the Dolibarr endpoint in the code of the oldest supported version (see
 the [dolibarr-api](.agents/skills/dolibarr-api/SKILL.md) skill). Keep
 the tool count low: prefer one tool with a `kind` parameter to one tool per
 Dolibarr endpoint, and the `dolibarr_get` / `dolibarr_request` passthrough to
-a tool used once. A new tool is listed in `docs/tools.md` and tested in the
-same change.
+a tool used once. A new tool is listed in `docs/tools.md` and tested in
+`tests/tools/test_<resource>.py` in the same change.

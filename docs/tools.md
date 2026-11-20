@@ -10,18 +10,25 @@ also sends the model short instructions (`INSTRUCTIONS` in `server.py`):
 | --- | --- | --- |
 | `get_status` | `GET status` | Check the connection and the API key |
 | `get_object` | `GET <kind>s/{id}` | Full object: thirdparty, contact, product, project, proposal, order, invoice |
+| `search_thirdparties` | `GET thirdparties` | By name or alias, and role (customer, prospect, supplier) |
 | `dolibarr_get` | `GET <path>` | Any other read |
 
 ## Write (`DOLIBARR_ALLOW_WRITE=true`)
 
 | Tool | Dolibarr endpoint | Annotation |
 | --- | --- | --- |
+| `create_thirdparty` | `POST thirdparties` | create |
 | `dolibarr_request` | any method and path | destructive |
 
 ## Dolibarr REST conventions
 
 - Authentication: the `DOLAPIKEY` header.
+- Lists take `limit`, `page`, `sortfield`, `sortorder`, `sqlfilters`, and
+  `properties` (the fields to return; ignored by old Dolibarr versions).
 - An empty list is a `404`, which the client turns into `[]`.
+- A `POST` that creates an object returns its numeric id.
+- `sqlfilters` values sit in single quotes and can't escape one: `like()`
+  replaces a quote in the searched text with the `_` wildcard.
 
 ## Dolibarr API reference
 
