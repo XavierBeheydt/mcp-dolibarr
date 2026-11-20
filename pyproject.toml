@@ -9,10 +9,19 @@ description = "MCP server for the Dolibarr ERP/CRM REST API"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
-dependencies = ["httpx>=0.28", "mcp>=2.3,<3"]
+dependencies = [
+    "fastmcp>=4.2.2,<5",
+    "httpx>=0.28",
+    "mcp>=2.3,<3",
+    "pydantic-settings>=2.16.3",
+    "typer>=0.29.2",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.15"]
+
+[project.scripts]
+mcp-dolibarr = "mcp_dolibarr.__main__:app"
 
 [build-system]
 requires = ["hatchling"]

@@ -2,12 +2,16 @@
 # SPDX-License-Identifier: MIT
 
 import json
+from collections.abc import Callable
+from contextlib import AbstractAsyncContextManager
 from typing import Any
 
 import httpx
 import pytest
+from fastmcp import Client
 
 from mcp_dolibarr.client import Dolibarr
+from mcp_dolibarr.server import build_server
 
 URL = "https://erp.test/api/index.php"
 
@@ -50,3 +54,17 @@ def dolibarr() -> MockDolibarr:
 @pytest.fixture
 def api(dolibarr: MockDolibarr) -> Dolibarr:
     return Dolibarr(URL, "test-key", httpx.MockTransport(dolibarr.handle))
+
+
+@pytest.fixture
+def connect(api: Dolibarr) -> Callable[..., AbstractAsyncContextManager[Client]]:
+    def _connect(allow_write: bool = False) -> AbstractAsyncContextManager[Client]:
+        return Client(build_server(api, allow_write))
+
+    return _connect
+
+
+async def call(client: Client, tool: str, **arguments: Any) -> Any:
+    result = await client.call_tool(tool, arguments, raise_on_error=False)
+    assert not result.is_error, result.content[0].text
+    return json.loads(result.content[0].text)
