@@ -1,35 +1,21 @@
 # Copyright (c) 2026 Beheydt.DEV <xavier.beheydt@gmail.com>
 # SPDX-License-Identifier: MIT
+# Doc: https://docs.pydantic.dev/latest/concepts/pydantic_settings/
 
-import os
-from dataclasses import dataclass
 from typing import Literal
 
-Transport = Literal["stdio", "http"]
+from pydantic import SecretStr
+from pydantic_settings import BaseSettings, CliSuppress, SettingsConfigDict
 
 
-@dataclass(frozen=True)
-class Settings:
+class Settings(BaseSettings):
+    """Command-line option, else environment variable, else `.env`, else default."""
+
+    model_config = SettingsConfigDict(env_file=".env", cli_kebab_case=True, cli_implicit_flags=True)
+
     dolibarr_url: str
-    dolibarr_api_key: str
-    allow_write: bool = False
-    transport: Transport = "stdio"
-    host: str = "127.0.0.1"
-    port: int = 8000
-
-    @classmethod
-    def from_env(cls) -> "Settings":
-        transport = os.environ.get("MCP_TRANSPORT", "stdio")
-        if transport not in ("stdio", "http"):
-            raise SystemExit(f"MCP_TRANSPORT must be stdio or http, not {transport!r}")
-        try:
-            return cls(
-                dolibarr_url=os.environ["DOLIBARR_URL"].rstrip("/"),
-                dolibarr_api_key=os.environ["DOLIBARR_API_KEY"],
-                allow_write=os.environ.get("DOLIBARR_ALLOW_WRITE", "").lower() in ("1", "true"),
-                transport=transport,
-                host=os.environ.get("MCP_HOST", "127.0.0.1"),
-                port=int(os.environ.get("MCP_PORT", "8000")),
-            )
-        except KeyError as missing:
-            raise SystemExit(f"Missing environment variable {missing}, see .env.example") from None
+    dolibarr_api_key: CliSuppress[SecretStr]
+    dolibarr_allow_write: bool = False
+    mcp_transport: Literal["stdio", "http"] = "stdio"
+    mcp_host: str = "127.0.0.1"
+    mcp_port: int = 8000

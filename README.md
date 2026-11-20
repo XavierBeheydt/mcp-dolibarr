@@ -23,14 +23,18 @@ this server allows.
 
 ## Configuration
 
-Settings come from the environment; copy `.env.example` to `.env`.
+Each setting is an environment variable and, except the API key, a command-line
+option (`--dolibarr-url`, `--mcp-port`... see `mcp-dolibarr --help`). The option
+wins over the variable, which wins over the `.env` file of the working directory
+(copy `.env.example`), which wins over the default. Keep the API key in the
+environment or in `.env`: an option would show in `ps` and in the shell history.
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
 | `DOLIBARR_URL` | required | API root, ending with `/api/index.php` |
 | `DOLIBARR_API_KEY` | required | API key of the Dolibarr user |
 | `DOLIBARR_ALLOW_WRITE` | `false` | Register the tools that write to Dolibarr |
-| `MCP_TRANSPORT` | `stdio` | `stdio`, or `streamable-http` (served at `/mcp`) |
+| `MCP_TRANSPORT` | `stdio` | `stdio`, or `http` (streamable HTTP, served at `/mcp`) |
 | `MCP_HOST` | `127.0.0.1` | HTTP bind address |
 | `MCP_PORT` | `8000` | HTTP port |
 
@@ -39,13 +43,13 @@ Settings come from the environment; copy `.env.example` to `.env`.
 Requires [uv](https://docs.astral.sh/uv/).
 
 ```sh
-uv run --env-file .env mcp-dolibarr
+uv run mcp-dolibarr
 ```
 
 Claude Code, over stdio:
 
 ```sh
-claude mcp add dolibarr -- uv run --directory /path/to/mcp-dolibarr --env-file .env mcp-dolibarr
+claude mcp add dolibarr -- uv run --directory /path/to/mcp-dolibarr mcp-dolibarr
 ```
 
 The HTTP transport has no authentication: keep it on localhost, or behind a

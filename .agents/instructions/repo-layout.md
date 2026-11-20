@@ -5,7 +5,7 @@ nothing fits, ask instead of adding a top-level directory.
 
 | Path | Content |
 | --- | --- |
-| `src/mcp_dolibarr/` | The package: `config.py` (settings from the environment), `client.py` (Dolibarr REST client), `server.py` (MCP server and tool registration), `__main__.py` (entry point) |
+| `src/mcp_dolibarr/` | The package: `config.py` (settings: command line, environment and `.env`), `client.py` (Dolibarr REST client), `server.py` (MCP server and tool registration), `__main__.py` (entry point) |
 | `src/mcp_dolibarr/tools/` | MCP tools, one module per Dolibarr resource, each with a `register()` function |
 | `tests/` | pytest tests, one `test_<module>.py` per module; Dolibarr is mocked in `conftest.py` |
 | `docs/` | Documentation (Markdown); no plans or roadmaps, those live in issues |
