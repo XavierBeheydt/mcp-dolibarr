@@ -39,6 +39,18 @@ async def test_create_document_posts_header_then_lines(connect, dolibarr: MockDo
     assert sent_line == line | {"product_type": 1}
 
 
+async def test_add_document_line_returns_the_updated_document(
+    connect, dolibarr: MockDolibarr
+) -> None:
+    dolibarr.on("POST", "orders/5/lines", 2)
+    dolibarr.on("GET", "orders/5", {"id": "5", "lines": [{"desc": "Support"}]})
+    line = {"desc": "Support", "qty": 1, "subprice": 90, "tva_tx": 20, "fk_product": 8}
+    async with connect(allow_write=True) as client:
+        doc = await call(client, "add_document_line", kind="order", id=5, line=line)
+    assert dolibarr.bodies("POST") == [line | {"product_type": 1}]
+    assert doc == {"id": "5", "lines": [{"desc": "Support"}]}
+
+
 async def test_validate_document(connect, dolibarr: MockDolibarr) -> None:
     dolibarr.on("POST", "proposals/4/validate", {"id": "4", "ref": "PR2611-0004"})
     async with connect(allow_write=True) as client:
