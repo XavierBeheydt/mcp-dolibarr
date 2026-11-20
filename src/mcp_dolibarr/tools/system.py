@@ -28,6 +28,8 @@ def register(mcp: MCPServer, api: Dolibarr, allow_write: bool) -> None:
         """
         return as_json(await api.request("GET", path, params))
 
+    # Read-only server: stop here. The write tools below are never registered, so the model
+    # cannot see them or call them.
     if not allow_write:
         return
 
