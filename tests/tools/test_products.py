@@ -18,6 +18,7 @@ async def test_search_products_builds_filters(connect, dolibarr: MockDolibarr) -
     assert params["sortfield"] == "t.ref"
 
 
-async def test_empty_search_returns_empty_list(connect) -> None:
+async def test_empty_search_returns_empty_list(connect, dolibarr: MockDolibarr) -> None:
+    dolibarr.on("GET", "products", [])
     async with connect() as client:
         assert await call(client, "search_products", text="nothing") == []
