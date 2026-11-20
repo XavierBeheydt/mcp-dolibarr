@@ -12,6 +12,7 @@ READ_TOOLS = {
     "get_object",
     "dolibarr_get",
     "search_thirdparties",
+    "search_products",
 }
 WRITE_TOOLS = {
     "dolibarr_request",

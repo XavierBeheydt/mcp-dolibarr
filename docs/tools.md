@@ -11,6 +11,7 @@ also sends the model short instructions (`INSTRUCTIONS` in `server.py`):
 | `get_status` | `GET status` | Check the connection and the API key |
 | `get_object` | `GET <kind>s/{id}` | Full object: thirdparty, contact, product, project, proposal, order, invoice |
 | `search_thirdparties` | `GET thirdparties` | By name or alias, and role (customer, prospect, supplier) |
+| `search_products` | `GET products` | By reference or label, and type (product, service) |
 | `dolibarr_get` | `GET <path>` | Any other read |
 
 ## Write (`DOLIBARR_ALLOW_WRITE=true`)
