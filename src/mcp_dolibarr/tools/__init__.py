@@ -15,7 +15,7 @@ CREATE = ToolAnnotations(read_only_hint=False, destructive_hint=False, open_worl
 IRREVERSIBLE = ToolAnnotations(read_only_hint=False, destructive_hint=True, open_world_hint=False)
 
 ObjectKind = Literal["thirdparty", "contact", "product", "project", "proposal", "order", "invoice"]
-DocumentKind = Literal["proposal", "order", "invoice"]
+SalesDocumentKind = Literal["proposal", "order", "invoice"]
 
 # The API path of each object kind accepted by `get_object`; the model sees only the kind.
 ENDPOINTS: dict[str, str] = {

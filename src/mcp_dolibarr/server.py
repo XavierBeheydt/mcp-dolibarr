@@ -6,7 +6,7 @@ from importlib.metadata import version
 from fastmcp import FastMCP
 
 from .client import Dolibarr
-from .tools import documents, products, system, thirdparties
+from .tools import products, sales_documents, system, thirdparties
 
 INSTRUCTIONS = """\
 Dolibarr ERP/CRM. Objects have a numeric `id` and a business reference `ref`.
@@ -21,7 +21,7 @@ Status codes (`fk_statut`):
 - invoice: 0 draft, 1 unpaid, 2 paid, 3 abandoned
 """
 
-MODULES = (system, thirdparties, products, documents)
+MODULES = (system, thirdparties, products, sales_documents)
 
 READ_ONLY = "\nThis server is read-only: it cannot change anything in Dolibarr.\n"
 

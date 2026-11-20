@@ -8,7 +8,7 @@ from fastmcp import FastMCP
 from pydantic import BaseModel, Field
 
 from ..client import Dolibarr
-from . import CREATE, ENDPOINTS, IRREVERSIBLE, READ, DocumentKind, Limit, Page, all_of, as_json
+from . import CREATE, ENDPOINTS, IRREVERSIBLE, READ, Limit, Page, SalesDocumentKind, all_of, as_json
 
 _SUMMARY = "id,ref,ref_client,socid,date,fin_validite,date_lim_reglement,total_ht,total_ttc,status"
 
@@ -30,15 +30,18 @@ def _timestamp(day: date) -> int:
 
 def register(mcp: FastMCP, api: Dolibarr, allow_write: bool) -> None:
     @mcp.tool(annotations=READ)
-    async def list_documents(
-        kind: DocumentKind,
+    async def list_sales_documents(
+        kind: SalesDocumentKind,
         thirdparty_id: int | None = None,
         status: int | None = None,
         sqlfilters: str | None = None,
         limit: Limit = 20,
         page: Page = 0,
     ) -> str:
-        """Proposals, orders or invoices, newest first; `status` codes are in the instructions."""
+        """Sales documents (proposals, orders or invoices), newest first.
+
+        The `status` codes are in the instructions.
+        """
         status_filter = f"(t.fk_statut:=:{status})" if status is not None else None
         return as_json(
             await api.list(
@@ -57,8 +60,8 @@ def register(mcp: FastMCP, api: Dolibarr, allow_write: bool) -> None:
         return
 
     @mcp.tool(annotations=CREATE)
-    async def create_document(
-        kind: DocumentKind,
+    async def create_sales_document(
+        kind: SalesDocumentKind,
         thirdparty_id: int,
         lines: list[Line],
         day: date | None = None,
@@ -67,7 +70,7 @@ def register(mcp: FastMCP, api: Dolibarr, allow_write: bool) -> None:
     ) -> str:
         """Create a draft proposal, order or invoice with its lines, dated `day` (default today).
 
-        It stays a draft, editable and deletable, until validate_document.
+        It stays a draft, editable and deletable, until validate_sales_document.
         """
         path = ENDPOINTS[kind]
         date_ = _timestamp(day or date.today())
@@ -85,13 +88,13 @@ def register(mcp: FastMCP, api: Dolibarr, allow_write: bool) -> None:
         return as_json(await api.get(f"{path}/{new_id}"))
 
     @mcp.tool(annotations=CREATE)
-    async def add_document_line(kind: DocumentKind, id: int, line: Line) -> str:
+    async def add_sales_document_line(kind: SalesDocumentKind, id: int, line: Line) -> str:
         """Add a line to a draft proposal, order or invoice; returns the updated document."""
         await api.post(f"{ENDPOINTS[kind]}/{id}/lines", line.model_dump())
         return as_json(await api.get(f"{ENDPOINTS[kind]}/{id}"))
 
     @mcp.tool(annotations=IRREVERSIBLE)
-    async def validate_document(kind: DocumentKind, id: int) -> str:
+    async def validate_sales_document(kind: SalesDocumentKind, id: int) -> str:
         """Validate a draft: it gets its final reference and can no longer be edited.
 
         A validated invoice is a legal document: confirm with the user first.
