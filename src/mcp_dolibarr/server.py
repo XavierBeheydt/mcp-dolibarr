@@ -1,6 +1,8 @@
 # Copyright (c) 2026 Beheydt.DEV <xavier.beheydt@gmail.com>
 # SPDX-License-Identifier: MIT
 
+from importlib.metadata import version
+
 from fastmcp import FastMCP
 
 from .client import Dolibarr
@@ -18,7 +20,11 @@ READ_ONLY = "\nThis server is read-only: it cannot change anything in Dolibarr.\
 
 
 def build_server(api: Dolibarr, allow_write: bool) -> FastMCP:
-    mcp = FastMCP("dolibarr", instructions=INSTRUCTIONS + ("" if allow_write else READ_ONLY))
+    mcp = FastMCP(
+        "dolibarr",
+        version=version("mcp-dolibarr"),
+        instructions=INSTRUCTIONS + ("" if allow_write else READ_ONLY),
+    )
     for module in (system,):
         module.register(mcp, api, allow_write)
     return mcp

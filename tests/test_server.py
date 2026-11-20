@@ -1,6 +1,8 @@
 # Copyright (c) 2026 Beheydt.DEV <xavier.beheydt@gmail.com>
 # SPDX-License-Identifier: MIT
 
+from importlib.metadata import version
+
 import pytest
 
 pytestmark = pytest.mark.anyio
@@ -24,3 +26,8 @@ async def test_write_tools_are_annotated(connect) -> None:
         assert not any(tools[name].read_only_hint for name in WRITE_TOOLS)
         assert tools["dolibarr_request"].destructive_hint
         assert "read-only" not in client.instructions
+
+
+async def test_server_announces_its_own_version(connect) -> None:
+    async with connect() as client:
+        assert client.server_info.version == version("mcp-dolibarr")
