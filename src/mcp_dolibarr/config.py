@@ -5,7 +5,7 @@ import os
 from dataclasses import dataclass
 from typing import Literal
 
-Transport = Literal["stdio", "streamable-http"]
+Transport = Literal["stdio", "http"]
 
 
 @dataclass(frozen=True)
@@ -20,8 +20,8 @@ class Settings:
     @classmethod
     def from_env(cls) -> "Settings":
         transport = os.environ.get("MCP_TRANSPORT", "stdio")
-        if transport not in ("stdio", "streamable-http"):
-            raise SystemExit(f"MCP_TRANSPORT must be stdio or streamable-http, not {transport!r}")
+        if transport not in ("stdio", "http"):
+            raise SystemExit(f"MCP_TRANSPORT must be stdio or http, not {transport!r}")
         try:
             return cls(
                 dolibarr_url=os.environ["DOLIBARR_URL"].rstrip("/"),

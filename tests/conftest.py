@@ -8,7 +8,7 @@ from typing import Any
 
 import httpx
 import pytest
-from mcp import Client
+from fastmcp import Client
 
 from mcp_dolibarr.client import Dolibarr
 from mcp_dolibarr.server import build_server
@@ -65,6 +65,6 @@ def connect(api: Dolibarr) -> Callable[..., AbstractAsyncContextManager[Client]]
 
 
 async def call(client: Client, tool: str, **arguments: Any) -> Any:
-    result = await client.call_tool(tool, arguments)
+    result = await client.call_tool(tool, arguments, raise_on_error=False)
     assert not result.is_error, result.content[0].text
     return json.loads(result.content[0].text)

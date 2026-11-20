@@ -13,7 +13,7 @@ def main() -> None:
     if settings.transport == "stdio":
         server.run()
     else:
-        server.run("streamable-http", host=settings.host, port=settings.port)
+        server.run("http", host=settings.host, port=settings.port)
 
 
 if __name__ == "__main__":

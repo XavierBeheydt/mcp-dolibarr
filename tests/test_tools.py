@@ -18,6 +18,8 @@ async def test_get_object_maps_kind_to_endpoint(connect, dolibarr: MockDolibarr)
 
 async def test_error_is_reported_to_the_model(connect) -> None:
     async with connect() as client:
-        result = await client.call_tool("get_object", {"kind": "invoice", "id": 99})
+        result = await client.call_tool(
+            "get_object", {"kind": "invoice", "id": 99}, raise_on_error=False
+        )
     assert result.is_error
     assert "Dolibarr 404" in result.content[0].text

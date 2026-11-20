@@ -3,13 +3,13 @@
 
 from typing import Any
 
-from mcp.server.mcpserver import MCPServer
+from fastmcp import FastMCP
 
 from ..client import Dolibarr, Method
 from . import ENDPOINTS, IRREVERSIBLE, READ, ObjectKind, as_json
 
 
-def register(mcp: MCPServer, api: Dolibarr, allow_write: bool) -> None:
+def register(mcp: FastMCP, api: Dolibarr, allow_write: bool) -> None:
     @mcp.tool(annotations=READ)
     async def get_status() -> str:
         """Dolibarr version and API status: checks the connection and the API key."""

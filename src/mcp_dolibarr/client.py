@@ -4,7 +4,7 @@
 from typing import Any, Literal
 
 import httpx
-from mcp.server.mcpserver.exceptions import ToolError
+from fastmcp.exceptions import ToolError
 
 Method = Literal["GET", "POST", "PUT", "DELETE"]
 
