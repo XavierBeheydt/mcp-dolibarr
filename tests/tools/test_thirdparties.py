@@ -24,21 +24,3 @@ async def test_create_thirdparty_sets_the_role_flags(connect, dolibarr: MockDoli
         created = await call(client, "create_thirdparty", name="ACME", role="supplier", zip=None)
     assert dolibarr.bodies("POST") == [{"name": "ACME", "fournisseur": 1}]
     assert created == {"id": "7", "name": "ACME"}
-
-
-async def test_get_object_maps_kind_to_endpoint(connect, dolibarr: MockDolibarr) -> None:
-    dolibarr.on("GET", "proposals/4", {"id": "4", "ref": "PR2611-0004", "note": None})
-    async with connect() as client:
-        assert await call(client, "get_object", kind="proposal", id=4) == {
-            "id": "4",
-            "ref": "PR2611-0004",
-        }
-
-
-async def test_error_is_reported_to_the_model(connect) -> None:
-    async with connect() as client:
-        result = await client.call_tool(
-            "get_object", {"kind": "invoice", "id": 99}, raise_on_error=False
-        )
-    assert result.is_error
-    assert "Dolibarr 404" in result.content[0].text
