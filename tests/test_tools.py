@@ -17,6 +17,15 @@ async def test_search_thirdparties_builds_filters(connect, dolibarr: MockDolibar
     assert params["sqlfilters"] == "((t.nom:like:'%d_Annecy%') or (t.name_alias:like:'%d_Annecy%'))"
 
 
+async def test_create_thirdparty_sets_the_role_flags(connect, dolibarr: MockDolibarr) -> None:
+    dolibarr.on("POST", "thirdparties", 7)
+    dolibarr.on("GET", "thirdparties/7", {"id": "7", "name": "ACME"})
+    async with connect(allow_write=True) as client:
+        created = await call(client, "create_thirdparty", name="ACME", role="supplier", zip=None)
+    assert dolibarr.bodies("POST") == [{"name": "ACME", "fournisseur": 1}]
+    assert created == {"id": "7", "name": "ACME"}
+
+
 async def test_get_object_maps_kind_to_endpoint(connect, dolibarr: MockDolibarr) -> None:
     dolibarr.on("GET", "proposals/4", {"id": "4", "ref": "PR2611-0004", "note": None})
     async with connect() as client:
