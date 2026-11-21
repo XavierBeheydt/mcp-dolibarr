@@ -14,8 +14,9 @@ nothing fits, ask instead of adding a top-level directory.
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
 | `.worktrees/` | Git worktrees, ignored by git (see `repo-workflow.md`) |
 
-Root files: `pyproject.toml`, `uv.lock`, `.env.example`, `.editorconfig`,
-`.gitattributes`, `.gitignore`, `AGENTS.md`, `README.md`, `LICENSE`.
+Root files: `pyproject.toml`, `uv.lock`, `Containerfile`, `.containerignore`,
+`.env.example`, `.editorconfig`, `.gitattributes`, `.gitignore`, `AGENTS.md`,
+`README.md`, `LICENSE`.
 
 `.claude/skills` is a symlink to `.agents/skills`, so Claude Code finds the
 same skills.
