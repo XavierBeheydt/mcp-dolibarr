@@ -24,3 +24,11 @@ async def test_create_thirdparty_sets_the_role_flags(connect, dolibarr: MockDoli
         created = await call(client, "create_thirdparty", name="ACME", role="supplier", zip=None)
     assert dolibarr.bodies("POST") == [{"name": "ACME", "fournisseur": 1}]
     assert created == {"id": "7", "name": "ACME"}
+
+
+async def test_search_without_result_returns_empty_list(connect, dolibarr: MockDolibarr) -> None:
+    dolibarr.on(
+        "GET", "thirdparties", {"error": {"code": 404, "message": "No suppliers found"}}, 404
+    )
+    async with connect() as client:
+        assert await call(client, "search_thirdparties", name="nobody", role="supplier") == []

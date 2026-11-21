@@ -26,8 +26,18 @@ async def test_get_drops_none_params(api: Dolibarr, dolibarr: MockDolibarr) -> N
     assert dict(dolibarr.last("GET").url.params) == {"limit": "5"}
 
 
-async def test_list_turns_404_into_empty_list(api: Dolibarr) -> None:
-    assert await api.list("invoices") == []
+async def test_list_turns_no_result_404_into_empty_list(
+    api: Dolibarr, dolibarr: MockDolibarr
+) -> None:
+    dolibarr.on(
+        "GET", "thirdparties", {"error": {"code": 404, "message": "No customers found"}}, 404
+    )
+    assert await api.list("thirdparties") == []
+
+
+async def test_list_keeps_other_404_as_error(api: Dolibarr) -> None:
+    with pytest.raises(DolibarrError, match="module is disabled"):
+        await api.list("invoices")
 
 
 async def test_get_keeps_404_as_error(api: Dolibarr) -> None:

@@ -1,12 +1,15 @@
 # Copyright (c) 2026 Beheydt.DEV <xavier.beheydt@gmail.com>
 # SPDX-License-Identifier: MIT
 
+import re
 from typing import Any, Literal
 
 import httpx
 from fastmcp.exceptions import ToolError
 
 Method = Literal["GET", "POST", "PUT", "DELETE"]
+
+_NO_RESULT = re.compile(r"No .+ found")
 
 _HINTS = {
     401: "invalid API key",
@@ -41,6 +44,7 @@ class DolibarrError(ToolError):
         hint = f" ({_HINTS[status]})" if status in _HINTS else ""
         super().__init__(f"Dolibarr {status}{hint}: {message}")
         self.status = status
+        self.message = message
 
 
 class Dolibarr:
@@ -70,14 +74,14 @@ class Dolibarr:
         return await self.request("GET", path, params)
 
     async def list(self, path: str, **params: Any) -> list[Any]:
-        """GET a list: Dolibarr answers an empty one with a 404, returned here as `[]`.
+        """GET a list: the 404 "No … found" of an empty third-party list is returned as `[]`.
 
-        A 404 on a single object stays an error: use `get` for those.
+        Any other 404 stays an error, such as the one of a disabled module.
         """
         try:
             return await self.get(path, **params)
         except DolibarrError as error:
-            if error.status == 404:
+            if error.status == 404 and _NO_RESULT.fullmatch(error.message):
                 return []
             raise
 

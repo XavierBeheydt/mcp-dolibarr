@@ -34,12 +34,28 @@ generates for them, which its `documents` API serves and no tool covers yet.
 - Authentication: the `DOLAPIKEY` header.
 - Lists take `limit`, `page`, `sortfield`, `sortorder`, `sqlfilters`, and
   `properties` (the fields to return; ignored by old Dolibarr versions).
-- An empty list is a `404`, which the client turns into `[]`.
+- An empty list of third parties is a `404` "No … found", which the client turns
+  into `[]`; the other lists answer `200` and `[]`. Any other `404` stays an
+  error: Dolibarr serves the routes of enabled modules only.
 - A `POST` that creates an object returns its numeric id.
 - Dates are Unix timestamps; `create_sales_document` sends noon UTC of the given
   day, so the date is right in any server time zone.
 - `sqlfilters` values sit in single quotes and can't escape one: `like()`
   replaces a quote in the searched text with the `_` wildcard.
+
+## Dolibarr modules
+
+A tool works only if its Dolibarr module is enabled; otherwise Dolibarr answers `404`
+and the tool reports it.
+
+| Resource | Module |
+| --- | --- |
+| `thirdparties` | Third Parties |
+| `products` | Products or Services |
+| `proposals` | Proposals |
+| `orders` | Sales Orders |
+| `invoices` | Invoices |
+| every endpoint | API / Web services (REST server) |
 
 ## Dolibarr API reference
 
