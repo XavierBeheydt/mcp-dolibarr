@@ -66,7 +66,9 @@ podman run --rm --env-file .env -p 127.0.0.1:8000:8000 mcp-dolibarr
 ```
 
 The HTTP transport has no authentication: keep it on localhost, or behind a
-reverse proxy that authenticates.
+reverse proxy that authenticates (see
+[Behind a reverse proxy](.agents/skills/container-build/SKILL.md#behind-a-reverse-proxy),
+with a Traefik example).
 
 ## Contributing
 
