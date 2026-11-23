@@ -57,8 +57,17 @@ Claude Code, over stdio:
 claude mcp add dolibarr -- uv run --directory /path/to/mcp-dolibarr mcp-dolibarr
 ```
 
+Container, over HTTP (see the
+[container-build](.agents/skills/container-build/SKILL.md) skill):
+
+```sh
+podman build -t mcp-dolibarr -f Containerfile .
+podman run --rm --env-file .env -p 127.0.0.1:8000:8000 mcp-dolibarr
+```
+
 The HTTP transport has no authentication: keep it on localhost, or behind a
-reverse proxy that authenticates.
+reverse proxy that authenticates (see
+[Deployment](docs/deployment.md), with a Traefik example).
 
 ## Contributing
 

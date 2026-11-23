@@ -87,8 +87,8 @@ read the matching one before editing a file in that language.
 
 Formatting is owned by the language's formatter (ruff for Python).
 `.editorconfig` sets indentation and line length only for the file types that
-have no formatter (JSON, TOML, YAML, Markdown): add a section there only for
-such a type, never for a language that has a formatter.
+have no formatter (Containerfile, JSON, TOML, YAML, Markdown): add a section
+there only for such a type, never for a language that has a formatter.
 
 ## Header Comment
 
@@ -117,6 +117,8 @@ Example, in a Python file:
 Procedures live in `.agents/skills/<name>/SKILL.md`; use the matching one
 instead of improvising the command:
 
+- [container-build](.agents/skills/container-build/SKILL.md): build and run
+  the container image (Podman).
 - [dolibarr-api](.agents/skills/dolibarr-api/SKILL.md): check a Dolibarr
   endpoint, or the API changes of a new Dolibarr release.
 - [python-deps](.agents/skills/python-deps/SKILL.md): install, add or update
