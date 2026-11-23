@@ -20,7 +20,13 @@ def serve(settings: Settings) -> None:
     if settings.mcp_transport == "stdio":
         server.run(show_banner=False)
     else:
-        server.run("http", host=settings.mcp_host, port=settings.mcp_port, show_banner=False)
+        server.run(
+            "http",
+            host=settings.mcp_host,
+            port=settings.mcp_port,
+            path=settings.mcp_path,
+            show_banner=False,
+        )
 
 
 @app.command(
@@ -36,10 +42,13 @@ def main(
         ),
     ] = None,
     transport: Annotated[
-        Transport | None, typer.Option(help="stdio, or http at /mcp (env: MCP_TRANSPORT)")
+        Transport | None, typer.Option(help="stdio, or http (env: MCP_TRANSPORT)")
     ] = None,
     host: Annotated[str | None, typer.Option(help="HTTP bind address (env: MCP_HOST)")] = None,
     port: Annotated[int | None, typer.Option(help="HTTP port (env: MCP_PORT)")] = None,
+    path: Annotated[
+        str | None, typer.Option(help="HTTP path, default /mcp (env: MCP_PATH)")
+    ] = None,
 ) -> None:
     options = {
         "dolibarr_url": url,
@@ -47,6 +56,7 @@ def main(
         "mcp_transport": transport,
         "mcp_host": host,
         "mcp_port": port,
+        "mcp_path": path,
     }
     try:
         settings = Settings(**{name: value for name, value in options.items() if value is not None})
