@@ -1,0 +1,82 @@
+# Copyright (c) 2026 Beheydt.DEV <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MIT
+# Doc: https://docs.github.com/en/actions/writing-workflows
+
+name: Dolibarr API watch
+
+on:
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: dolibarr-api-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    name: Compare with the latest Dolibarr release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      DOLIBARR: https://github.com/Dolibarr/dolibarr
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Open an issue for a new release
+        run: |
+          old="$(< .github/dolibarr-api-version)"
+          new="$(git ls-remote --tags --refs "$DOLIBARR" | sed -n 's#.*refs/tags/##p' \
+            | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1)"
+          echo "Checked against $old, latest release $new"
+          [[ "$old" != "$new" ]] || exit 0
+          title="Dolibarr API changes in $new"
+          if [[ -n "$(gh issue list --state all --label 'scope: client' \
+            --search "\"$title\" in:title" --json number --jq '.[].number')" ]]; then
+            echo "An issue already exists for $new"
+            exit 0
+          fi
+
+          tools=$(grep -oE 'htdocs/[a-z/]+/api_[a-z]+\.class\.php' docs/tools.md | sort -u)
+          git init -q /tmp/dolibarr && cd /tmp/dolibarr
+          git fetch -q --depth=1 --filter=blob:none "$DOLIBARR" tag "$old" tag "$new"
+          # shellcheck disable=SC2086
+          used=$(git diff --stat=100 "$old" "$new" -- $tools)
+          others=$(git diff --name-only "$old" "$new" -- ':(glob)htdocs/**/class/api_*.class.php' \
+            | grep -vxF "$tools" || true)
+          changelog=$(git diff "$old" "$new" -- ChangeLog | sed -n 's/^+\(.*\)/\1/p' \
+            | grep -iE '\b(api|rest)\b' || true)
+
+          cat > /tmp/body.md <<EOF
+          Dolibarr [$new]($DOLIBARR/releases/tag/$new) is out; the tools were last checked against $old (\`.github/dolibarr-api-version\`).
+
+          Review it with the [dolibarr-api]($GITHUB_SERVER_URL/$GH_REPO/blob/dev/.agents/skills/dolibarr-api/SKILL.md) skill, then set \`.github/dolibarr-api-version\` to $new.
+
+          ## API files used by the tools
+
+          \`\`\`
+          ${used:-No change.}
+          \`\`\`
+
+          ## Other API files changed
+
+          \`\`\`
+          ${others:-None.}
+          \`\`\`
+
+          ## ChangeLog lines naming the API
+
+          \`\`\`
+          ${changelog:-None.}
+          \`\`\`
+
+          [Full diff]($DOLIBARR/compare/$old...$new)
+          EOF
+          gh issue create --title "$title" --label 'scope: client' --body-file /tmp/body.md
