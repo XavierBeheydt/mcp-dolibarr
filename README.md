@@ -91,6 +91,10 @@ uv sync --extra dev
 uv run ruff format && uv run ruff check && uv run pytest -q
 ```
 
+The integration tests run every tool against a disposable Dolibarr in
+containers: see the [dolibarr-test](.agents/skills/dolibarr-test/SKILL.md)
+skill.
+
 ## License
 
 [MIT](LICENSE)

@@ -1,0 +1,43 @@
+# Copyright (c) 2026 Beheydt.DEV <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MIT
+# Doc: https://github.com/Dolibarr/dolibarr-docker
+#
+# A disposable Dolibarr for the integration tests, with Dolibarr's demo data.
+# Never point it at a real database: see the dolibarr-test skill.
+
+services:
+  db:
+    image: docker.io/library/mariadb:11.4
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: dolibarr
+      MARIADB_USER: dolibarr
+      MARIADB_PASSWORD: dolibarr
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 2s
+      retries: 60
+
+  dolibarr:
+    image: ${DOLIBARR_IMAGE:-docker.io/dolibarr/dolibarr:${DOLIBARR_VERSION:-24.0.0}}
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DOLI_DB_HOST: db
+      DOLI_DB_NAME: dolibarr
+      DOLI_DB_USER: dolibarr
+      DOLI_DB_PASSWORD: dolibarr
+      DOLI_ADMIN_LOGIN: admin
+      DOLI_ADMIN_PASSWORD: admin
+      DOLI_INIT_DEMO: "1"
+      DOLI_TEST_API_KEY: ${DOLIBARR_TEST_API_KEY:-integration-test-key}
+    volumes:
+      - ./docker-init.d:/var/www/scripts/docker-init.d:ro
+    ports:
+      - 127.0.0.1:${DOLIBARR_TEST_PORT:-8080}:80
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-H", "DOLAPIKEY: ${DOLIBARR_TEST_API_KEY:-integration-test-key}",
+             "http://localhost/api/index.php/status"]
+      interval: 3s
+      retries: 100
