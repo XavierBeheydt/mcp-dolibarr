@@ -1,0 +1,95 @@
+# Copyright (c) 2026 Beheydt.DEV <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MIT
+# Doc: https://docs.github.com/en/actions/writing-workflows
+#
+# The integration tests (see the dolibarr-test skill), on the release PR and on
+# demand: the oldest supported Dolibarr, the maintainer's, and the newest one.
+
+name: Integration
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dolibarr-version:
+        description: Dolibarr release to test, X.Y.Z (empty for the default versions)
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: integration-${{ github.ref }}-${{ inputs.dolibarr-version }}
+  cancel-in-progress: true
+
+jobs:
+  versions:
+    name: Dolibarr versions
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.pick.outputs.matrix }}
+    steps:
+      - id: pick
+        env:
+          VERSION: ${{ inputs.dolibarr-version }}
+        run: |
+          releases=$(git ls-remote --tags --refs https://github.com/Dolibarr/dolibarr \
+            | sed -n 's#.*refs/tags/##p' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V)
+          if [[ -n "$VERSION" ]]; then
+            grep -qxF -- "$VERSION" <<<"$releases" || {
+              echo "::error::'$VERSION' is not a Dolibarr release (no X.Y.Z tag of that name)"
+              exit 1; }
+            versions="$VERSION"
+          else
+            versions=$(printf '%s\n' 24.0.0 24.0.2 "$(tail -1 <<<"$releases")")
+          fi
+          echo "matrix=$(sort -uV <<<"$versions" | jq -Rnc '[inputs]')" >> "$GITHUB_OUTPUT"
+
+  test:
+    name: Dolibarr ${{ matrix.version }}
+    needs: versions
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJSON(needs.versions.outputs.matrix) }}
+    env:
+      COMPOSE: docker compose -f tests/integration/compose.yml
+      DOLIBARR_VERSION: ${{ matrix.version }}
+      DOLIBARR_TEST_URL: http://127.0.0.1:8080/api/index.php
+      DOLIBARR_TEST_API_KEY: integration-test-key
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - run: uv sync --locked --extra dev
+      - name: Build the image from the release tag if it has no official one
+        run: |
+          docker manifest inspect "docker.io/dolibarr/dolibarr:$DOLIBARR_VERSION" > /dev/null \
+            2>&1 && exit 0
+          echo "::notice::No official image for Dolibarr $DOLIBARR_VERSION: built from its tag"
+          docker build -t "localhost/dolibarr:$DOLIBARR_VERSION" \
+            --build-arg "DOLIBARR_VERSION=$DOLIBARR_VERSION" \
+            -f tests/integration/Containerfile tests/integration
+          echo "DOLIBARR_IMAGE=localhost/dolibarr:$DOLIBARR_VERSION" >> "$GITHUB_ENV"
+      - run: $COMPOSE up -d --wait --wait-timeout 600
+      - run: uv run python tests/integration/seed.py
+      - run: uv run pytest -m integration -v
+      - if: failure()
+        run: $COMPOSE logs --tail 200 dolibarr
+
+  integration:
+    name: Integration
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          RESULT: ${{ needs.test.result }}
+        run: |
+          echo "Integration tests: $RESULT"
+          [[ "$RESULT" == success ]]

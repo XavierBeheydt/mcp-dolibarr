@@ -11,7 +11,10 @@ Never tag unless the user asks. The steps, from
 1. A `chore(release): vX.Y.Z` PR into `dev` sets `version` in
    `pyproject.toml` (`uv version X.Y.Z`, which updates `uv.lock` too), in
    the PEP 440 spelling for a pre-release (`X.Y.ZaN`, `X.Y.ZbN`, `X.Y.ZrcN`).
-2. A `dev` → `main` PR, merged with a merge commit.
+2. A `dev` → `main` PR, merged with a merge commit. It runs the integration
+   tests (`integration.yml`) on Dolibarr 24.0.0 (the oldest supported),
+   24.0.2 and the newest release; the `Integration` check must be green
+   before the merge.
 3. Once CI is green on `main`, tag the merge commit and push the tag:
 
    ```sh

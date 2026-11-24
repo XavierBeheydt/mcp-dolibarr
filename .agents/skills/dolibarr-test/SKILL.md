@@ -55,3 +55,11 @@ export DOLIBARR_VERSION=24.0.3 DOLIBARR_IMAGE=localhost/dolibarr:24.0.3
 
 The `Containerfile` takes the newest official image (`BASE_VERSION`) and
 replaces its sources with the tag's: the tested code is the release's.
+
+## In the CI
+
+`.github/workflows/integration.yml` runs this cycle on every PR into `main`
+(the release PR) for 24.0.0, 24.0.2 and the newest release, and on demand
+(*Run workflow*, with a `dolibarr-version`). A version without an official
+image is built from its tag; a version that is not a release fails at once.
+The `Integration` job sums up the matrix: it is the check to require.
