@@ -79,7 +79,8 @@ class Dolibarr:
         Any other 404 stays an error, such as the one of a disabled module.
         """
         try:
-            return await self.get(path, **params)
+            items: list[Any] = await self.get(path, **params)
+            return items
         except DolibarrError as error:
             if error.status == 404 and _NO_RESULT.fullmatch(error.message):
                 return []

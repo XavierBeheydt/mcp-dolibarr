@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 # Doc: https://typer.tiangolo.com/
 
-from typing import Annotated
+from typing import Annotated, Any
 
 import typer
 from pydantic import ValidationError
@@ -41,7 +41,7 @@ def main(
     host: Annotated[str | None, typer.Option(help="HTTP bind address (env: MCP_HOST)")] = None,
     port: Annotated[int | None, typer.Option(help="HTTP port (env: MCP_PORT)")] = None,
 ) -> None:
-    options = {
+    options: dict[str, Any] = {
         "dolibarr_url": url,
         "dolibarr_allow_write": allow_write,
         "mcp_transport": transport,
