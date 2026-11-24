@@ -43,27 +43,30 @@ environment or in `.env`: an option would show in `ps` and in the shell history.
 | `MCP_HOST` | `127.0.0.1` | HTTP bind address |
 | `MCP_PORT` | `8000` | HTTP port |
 
-## Run
+## Install and run
 
-Requires [uv](https://docs.astral.sh/uv/).
+From [PyPI](https://pypi.org/p/mcp-dolibarr), with
+[uv](https://docs.astral.sh/uv/):
 
 ```sh
-uv run mcp-dolibarr
+uvx mcp-dolibarr          # or: pip install mcp-dolibarr && mcp-dolibarr
 ```
 
 Claude Code, over stdio:
 
 ```sh
-claude mcp add dolibarr -- uv run --directory /path/to/mcp-dolibarr mcp-dolibarr
+claude mcp add dolibarr -- uvx mcp-dolibarr
 ```
 
-Container, over HTTP (see the
-[container-build](.agents/skills/container-build/SKILL.md) skill):
+Container, over HTTP, from the GitHub Container Registry (`latest`, a version
+such as `0.1.0` or `0.1`, or `dev` for the `dev` branch):
 
 ```sh
-podman build -t mcp-dolibarr -f Containerfile .
-podman run --rm --env-file .env -p 127.0.0.1:8000:8000 mcp-dolibarr
+podman run --rm --env-file .env -p 127.0.0.1:8000:8000 ghcr.io/xavierbeheydt/mcp-dolibarr:latest
 ```
+
+From a clone, run `uv run mcp-dolibarr`, or build the image (see the
+[container-build](.agents/skills/container-build/SKILL.md) skill).
 
 The HTTP transport has no authentication: keep it on localhost, or behind a
 reverse proxy that authenticates (see
@@ -90,6 +93,10 @@ With [uv](https://docs.astral.sh/uv/):
 uv sync --extra dev
 uv run ruff format && uv run ruff check && uv run pytest -q
 ```
+
+The integration tests run every tool against a disposable Dolibarr in
+containers: see the [dolibarr-test](.agents/skills/dolibarr-test/SKILL.md)
+skill.
 
 ## License
 

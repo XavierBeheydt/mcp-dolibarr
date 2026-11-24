@@ -45,8 +45,9 @@ Settings that enforce the rules above; check them with
   through a pull request, merge commit only.
 - Both: 0 approving reviews while there is a single maintainer.
 - Not yet enforced: required status checks (CI exists,
-  `.github/workflows/ci.yml`; making it required is the maintainer's call)
-  and required reviews.
+  `.github/workflows/ci.yml`, and the `Integration` check of
+  `integration.yml` on PRs into `main`; making them required is the
+  maintainer's call) and required reviews.
 
 ## Commits
 
@@ -79,7 +80,9 @@ The project version is `version` in `[project]` (`pyproject.toml`). Before
 each tag, a `chore(release): vX.Y.Z` PR into `dev` sets it to the version
 about to be tagged; `dev` is then merged into `main`, and the release is
 tagged by hand as semver `vX.Y.Z` on that merge commit, once CI is green.
-Never tag unless the user asks.
+Never tag unless the user asks. The tag publishes the image, the package and
+the GitHub release (`release.yml`, see the
+[github-release](../skills/github-release/SKILL.md) skill).
 
 Pre-releases follow semver: `vX.Y.Z-alpha.N`, then `-beta.N`, then `-rc.N`,
 all before `vX.Y.Z`; `pyproject.toml` holds the PEP 440 spelling
