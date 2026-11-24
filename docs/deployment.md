@@ -7,32 +7,20 @@ authenticates. Build and run it with the
 
 ## Behind a reverse proxy
 
-A reverse proxy gives the server its public URL, such as
-`https://mcp.example.com/dolibarr`, and handles TLS. Set `MCP_PATH` to the
-public path, and the proxy only forwards. With Traefik, `MCP_PATH=/dolibarr` in
-the environment of the service and these labels:
+The proxy handles TLS and forwards to port 8000. With Traefik, these labels on
+the service give `https://mcp.example.com/mcp`:
 
 ```yaml
 labels:
   - traefik.enable=true
-  - traefik.http.routers.dolibarr-mcp.rule=Host(`mcp.example.com`) && PathPrefix(`/dolibarr`)
-  - traefik.http.routers.dolibarr-mcp.entrypoints=websecure
-  - traefik.http.routers.dolibarr-mcp.tls=true
-  - traefik.http.services.dolibarr-mcp.loadbalancer.server.port=8000
+  - traefik.http.routers.mcp.rule=Host(`mcp.example.com`) && PathPrefix(`/mcp`)
+  - traefik.http.routers.mcp.entrypoints=websecure
+  - traefik.http.routers.mcp.tls=true
+  - traefik.http.services.mcp.loadbalancer.server.port=8000
 ```
 
-- The server answers on `/dolibarr` only, not on `/mcp`. Give the clients the
-  URL without a trailing slash: the server redirects `/dolibarr/` to
-  `/dolibarr`, with the scheme it sees, which is `http` behind a TLS proxy.
-- To keep the default `/mcp` instead, rewrite the public path to it, with an
-  anchored regex so that the trailing slash works too:
-  `replacepathregex.regex=^/dolibarr/?$$` and `replacepathregex.replacement=/mcp`
-  (a middleware of the same router). An unanchored prefix rewrite turns
-  `/dolibarr/` into `/mcp/`, which the server redirects to a path the proxy
-  does not route.
-- The responses stream: Traefik does not buffer them by default. With nginx,
-  set `proxy_buffering off`.
-- Checked with Traefik v3 over HTTP, both ways (`MCP_PATH` with a `Host` rule
-  and no rewrite, and the rewrite to `/mcp`): an MCP session lists the tools
-  and calls one. The labels are the same options as the file configuration
-  that was run, and were not run themselves.
+- For another path, set `MCP_PATH` and the same `PathPrefix`.
+- Give the clients the URL without a trailing slash: behind a TLS proxy, the
+  server redirects `/mcp/` to an `http` URL.
+- The responses stream: Traefik does not buffer them. With nginx, set
+  `proxy_buffering off`.
