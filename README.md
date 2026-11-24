@@ -39,9 +39,10 @@ environment or in `.env`: an option would show in `ps` and in the shell history.
 | `DOLIBARR_URL` | required | API root, ending with `/api/index.php` |
 | `DOLIBARR_API_KEY` | required | API key of the Dolibarr user |
 | `DOLIBARR_ALLOW_WRITE` | `false` | Register the tools that write to Dolibarr |
-| `MCP_TRANSPORT` | `stdio` | `stdio`, or `http` (streamable HTTP, served at `/mcp`) |
+| `MCP_TRANSPORT` | `stdio` | `stdio`, or `http` (streamable HTTP) |
 | `MCP_HOST` | `127.0.0.1` | HTTP bind address |
 | `MCP_PORT` | `8000` | HTTP port |
+| `MCP_PATH` | `/mcp` | HTTP path, starting with `/` |
 
 ## Run
 

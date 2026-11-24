@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: MIT
 # Doc: https://docs.pydantic.dev/latest/concepts/pydantic_settings/
 
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import SecretStr
+from pydantic import SecretStr, StringConstraints
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 Transport = Literal["stdio", "http"]
@@ -21,3 +21,4 @@ class Settings(BaseSettings):
     mcp_transport: Transport = "stdio"
     mcp_host: str = "127.0.0.1"
     mcp_port: int = 8000
+    mcp_path: Annotated[str, StringConstraints(pattern="^/")] = "/mcp"
