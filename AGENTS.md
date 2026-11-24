@@ -121,6 +121,8 @@ instead of improvising the command:
   the container image (Podman).
 - [dolibarr-api](.agents/skills/dolibarr-api/SKILL.md): check a Dolibarr
   endpoint, or the API changes of a new Dolibarr release.
+- [github-release](.agents/skills/github-release/SKILL.md): release a
+  version (tag, image, PyPI package, GitHub release).
 - [python-deps](.agents/skills/python-deps/SKILL.md): install, add or update
   dependencies (uv).
 - [python-format](.agents/skills/python-format/SKILL.md): format with ruff.

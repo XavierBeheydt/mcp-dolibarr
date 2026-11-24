@@ -8,6 +8,17 @@ version = "0.0.0"
 description = "MCP server for the Dolibarr ERP/CRM REST API"
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Beheydt.DEV", email = "xavier.beheydt@gmail.com" }]
+keywords = ["mcp", "dolibarr", "erp", "crm", "model-context-protocol"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Office/Business :: Financial :: Accounting",
+]
 requires-python = ">=3.11"
 dependencies = [
     "fastmcp>=4.2.2,<5",
@@ -19,6 +30,11 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.15"]
+
+[project.urls]
+Repository = "https://github.com/XavierBeheydt/mcp-dolibarr"
+Issues = "https://github.com/XavierBeheydt/mcp-dolibarr/issues"
+Changelog = "https://github.com/XavierBeheydt/mcp-dolibarr/releases"
 
 [project.scripts]
 mcp-dolibarr = "mcp_dolibarr.__main__:app"
