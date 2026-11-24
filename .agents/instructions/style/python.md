@@ -10,6 +10,8 @@ Applies to every Python file in the repo.
   `Optional`.
 - Type hints are mandatory on every function: all parameters and the return
   type.
+- mypy checks `src/` in strict mode (`[tool.mypy]` in `pyproject.toml`);
+  tests are not type-checked.
 - Four spaces for indentation, lines up to 100 characters.
 - In a module, the helper functions come together at the top, after the
   constants and before the first class.

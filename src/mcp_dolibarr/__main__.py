@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 # Doc: https://typer.tiangolo.com/
 
-from typing import Annotated
+from typing import Annotated, Any
 
 import typer
 from pydantic import ValidationError
@@ -50,7 +50,7 @@ def main(
         str | None, typer.Option(help="HTTP path, default /mcp (env: MCP_PATH)")
     ] = None,
 ) -> None:
-    options = {
+    options: dict[str, Any] = {
         "dolibarr_url": url,
         "dolibarr_allow_write": allow_write,
         "mcp_transport": transport,

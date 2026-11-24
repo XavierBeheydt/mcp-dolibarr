@@ -67,12 +67,13 @@ goes through with everything green:
 1. Read the matching [style guide](#style-guide).
 2. Code the feature, or the fix (a bug starts with a test that reproduces
    it), following the guide.
-3. Format and lint, with the language's [skills](#skills)
-   (`<language>-format`, `<language>-lint`).
+3. Format, lint and type-check, with the language's [skills](#skills)
+   (`<language>-format`, `<language>-lint`, `<language>-typecheck`).
 4. Test, with the language's test skill (`<language>-test`).
 5. If any step fails, fix and restart from step 2; otherwise, move on.
 
-If a language has no lint or test skill, say so instead of skipping the step.
+If a language has no lint, type-check or test skill, say so instead of
+skipping the step.
 
 For a task of more than one step, state a short plan first, each step with
 its check:
@@ -126,6 +127,8 @@ instead of improvising the command:
 - [python-format](.agents/skills/python-format/SKILL.md): format with ruff.
 - [python-lint](.agents/skills/python-lint/SKILL.md): lint with ruff.
 - [python-test](.agents/skills/python-test/SKILL.md): run tests with pytest.
+- [python-typecheck](.agents/skills/python-typecheck/SKILL.md): type-check
+  with mypy.
 - [todo-ai](.agents/skills/todo-ai/SKILL.md): resolve the `TODO-AI` comments,
   grouped, one subagent per group.
 - [vibe](.agents/skills/vibe/SKILL.md): delegate a bounded read-only task to

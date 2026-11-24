@@ -89,7 +89,7 @@ With [uv](https://docs.astral.sh/uv/):
 
 ```sh
 uv sync --extra dev
-uv run ruff format && uv run ruff check && uv run pytest -q
+uv run ruff format && uv run ruff check && uv run mypy && uv run pytest -q
 ```
 
 ## License
