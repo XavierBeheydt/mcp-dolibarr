@@ -52,3 +52,5 @@ select = ["E", "F", "I", "UP", "B"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "-m 'not integration'"
+markers = ["integration: against a disposable Dolibarr, see the dolibarr-test skill"]

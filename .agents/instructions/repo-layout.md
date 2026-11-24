@@ -9,6 +9,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `src/mcp_dolibarr/tools/` | MCP tools, one module per Dolibarr resource, each with a `register()` function |
 | `tests/` | pytest tests, one `test_<module>.py` per module; Dolibarr is mocked in `conftest.py` |
 | `tests/tools/` | The tests of the MCP tools, one `test_<resource>.py` per `src/mcp_dolibarr/tools/<resource>.py` |
+| `tests/integration/` | Integration tests against a disposable Dolibarr: `compose.yml`, `docker-init.d/`, `Containerfile` (a release without an official image), `seed.py`, `test_tools.py` (see the `dolibarr-test` skill) |
 | `docs/` | Documentation (Markdown); no plans or roadmaps, those live in issues |
 | `.github/` | GitHub configuration: `workflows/` (CI in `ci.yml`, publishing in `release.yml`, the weekly Dolibarr API watch in `dolibarr-api.yml`, the integration tests in `integration.yml`) and `dolibarr-api-version` (the Dolibarr release the tools were last checked against) |
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
