@@ -9,7 +9,7 @@ from fastmcp.exceptions import ToolError
 
 Method = Literal["GET", "POST", "PUT", "DELETE"]
 
-_NO_RESULT = re.compile(r"No .+ found")
+_NO_RESULT = re.compile(r"(Not Found: )?No .+ found")
 
 _HINTS = {
     401: "invalid API key",

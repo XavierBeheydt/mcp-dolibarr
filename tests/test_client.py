@@ -26,12 +26,15 @@ async def test_get_drops_none_params(api: Dolibarr, dolibarr: MockDolibarr) -> N
     assert dict(dolibarr.last("GET").url.params) == {"limit": "5"}
 
 
+@pytest.mark.parametrize(
+    # Dolibarr's REST server prefixes the message with the HTTP reason.
+    "message",
+    ["No customers found", "Not Found: No third parties found"],
+)
 async def test_list_turns_no_result_404_into_empty_list(
-    api: Dolibarr, dolibarr: MockDolibarr
+    api: Dolibarr, dolibarr: MockDolibarr, message: str
 ) -> None:
-    dolibarr.on(
-        "GET", "thirdparties", {"error": {"code": 404, "message": "No customers found"}}, 404
-    )
+    dolibarr.on("GET", "thirdparties", {"error": {"code": 404, "message": message}}, 404)
     assert await api.list("thirdparties") == []
 
 

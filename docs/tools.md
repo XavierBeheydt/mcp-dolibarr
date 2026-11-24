@@ -34,7 +34,7 @@ generates for them, which its `documents` API serves and no tool covers yet.
 - Authentication: the `DOLAPIKEY` header.
 - Lists take `limit`, `page`, `sortfield`, `sortorder`, `sqlfilters`, and
   `properties` (the fields to return; ignored by old Dolibarr versions).
-- An empty list of third parties is a `404` "No … found", which the client turns
+- An empty list of third parties is a `404` "Not Found: No … found", which the client turns
   into `[]`; the other lists answer `200` and `[]`. Any other `404` stays an
   error: Dolibarr serves the routes of enabled modules only.
 - A `POST` that creates an object returns its numeric id.
