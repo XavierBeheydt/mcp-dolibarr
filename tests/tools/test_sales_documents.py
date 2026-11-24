@@ -59,6 +59,21 @@ async def test_add_sales_document_line_returns_the_updated_document(
     assert doc == {"id": "5", "lines": [{"desc": "Support"}]}
 
 
+async def test_a_proposal_line_goes_to_line(connect, dolibarr: MockDolibarr) -> None:
+    dolibarr.on("POST", "proposals", 4)
+    dolibarr.on("POST", "proposals/4/line", 1)
+    dolibarr.on("GET", "proposals/4", {"id": "4"})
+    line = {"desc": "Audit", "qty": 1, "subprice": 500, "tva_tx": 20}
+    async with connect(allow_write=True) as client:
+        await call(client, "create_sales_document", kind="proposal", thirdparty_id=3, lines=[line])
+        await call(client, "add_sales_document_line", kind="proposal", id=4, line=line)
+    assert [r.url.path for r in dolibarr.requests if r.method == "POST"] == [
+        "/api/index.php/proposals",
+        "/api/index.php/proposals/4/line",
+        "/api/index.php/proposals/4/line",
+    ]
+
+
 async def test_validate_sales_document(connect, dolibarr: MockDolibarr) -> None:
     dolibarr.on("POST", "proposals/4/validate", {"id": "4", "ref": "PR2611-0004"})
     async with connect(allow_write=True) as client:
