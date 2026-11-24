@@ -1,0 +1,18 @@
+# Copyright (c) 2026 Beheydt.DEV <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MIT
+# Doc: https://github.com/Dolibarr/dolibarr-docker
+#
+# A Dolibarr release that has no official image yet: the newest official image,
+# with the sources of the release tag. See the dolibarr-test skill.
+
+ARG BASE_VERSION=24.0.2
+FROM docker.io/dolibarr/dolibarr:${BASE_VERSION}
+ARG DOLIBARR_VERSION
+ADD https://github.com/Dolibarr/dolibarr/archive/refs/tags/${DOLIBARR_VERSION}.tar.gz /tmp/dolibarr.tar.gz
+RUN rm -rf /var/www/html/* \
+    && tar -xzf /tmp/dolibarr.tar.gz -C /var/www/html --strip-components=2 \
+        "dolibarr-${DOLIBARR_VERSION}/htdocs" \
+    && mkdir -p /var/www/html/custom \
+    && chown -R www-data:www-data /var/www/html \
+    && rm /tmp/dolibarr.tar.gz
+ENV DOLI_VERSION=${DOLIBARR_VERSION}

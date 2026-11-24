@@ -36,7 +36,10 @@ user: it must be rotated, deleting the commit is not enough.
 
 This server drives an ERP holding real invoices and customers:
 
-- Tests never reach a real Dolibarr: they mock it (see `tests/conftest.py`).
+- Tests never reach the maintainer's Dolibarr: the unit tests mock it (see
+  `tests/conftest.py`), the integration tests run only on the disposable one
+  of `tests/integration` (see the
+  [dolibarr-test](.agents/skills/dolibarr-test/SKILL.md) skill).
 - A tool that writes to Dolibarr is registered only when writes are enabled
   (`DOLIBARR_ALLOW_WRITE`), and carries the matching MCP annotations. Never
   add a write path that bypasses this switch.
@@ -121,6 +124,8 @@ instead of improvising the command:
   the container image (Podman).
 - [dolibarr-api](.agents/skills/dolibarr-api/SKILL.md): check a Dolibarr
   endpoint, or the API changes of a new Dolibarr release.
+- [dolibarr-test](.agents/skills/dolibarr-test/SKILL.md): run the integration
+  tests against a disposable Dolibarr.
 - [python-deps](.agents/skills/python-deps/SKILL.md): install, add or update
   dependencies (uv).
 - [python-format](.agents/skills/python-format/SKILL.md): format with ruff.
