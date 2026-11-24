@@ -10,6 +10,8 @@ from pydantic import BaseModel, Field
 from ..client import Dolibarr
 from . import CREATE, ENDPOINTS, IRREVERSIBLE, READ, Limit, Page, SalesDocumentKind, all_of, as_json
 
+# A proposal takes one line on `line`; its `lines` takes a list of lines.
+_LINE = {"proposal": "line", "order": "lines", "invoice": "lines"}
 _SUMMARY = "id,ref,ref_client,socid,date,fin_validite,date_lim_reglement,total_ht,total_ttc,status"
 
 
@@ -84,13 +86,13 @@ def register(mcp: FastMCP, api: Dolibarr, allow_write: bool) -> None:
             },
         )
         for line in lines:
-            await api.post(f"{path}/{new_id}/lines", line.model_dump())
+            await api.post(f"{path}/{new_id}/{_LINE[kind]}", line.model_dump())
         return as_json(await api.get(f"{path}/{new_id}"))
 
     @mcp.tool(annotations=CREATE)
     async def add_sales_document_line(kind: SalesDocumentKind, id: int, line: Line) -> str:
         """Add a line to a draft proposal, order or invoice; returns the updated document."""
-        await api.post(f"{ENDPOINTS[kind]}/{id}/lines", line.model_dump())
+        await api.post(f"{ENDPOINTS[kind]}/{id}/{_LINE[kind]}", line.model_dump())
         return as_json(await api.get(f"{ENDPOINTS[kind]}/{id}"))
 
     @mcp.tool(annotations=IRREVERSIBLE)

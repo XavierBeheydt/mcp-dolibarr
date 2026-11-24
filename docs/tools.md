@@ -20,8 +20,8 @@ also sends the model short instructions (`INSTRUCTIONS` in `server.py`):
 | Tool | Dolibarr endpoint | Annotation |
 | --- | --- | --- |
 | `create_thirdparty` | `POST thirdparties` | create |
-| `create_sales_document` | `POST <kind>s`, then `POST <kind>s/{id}/lines` per line | create (draft) |
-| `add_sales_document_line` | `POST <kind>s/{id}/lines` | create |
+| `create_sales_document` | `POST <kind>s`, then one `POST` per line (see below) | create (draft) |
+| `add_sales_document_line` | `POST proposals/{id}/line`, `orders/{id}/lines`, `invoices/{id}/lines` | create |
 | `validate_sales_document` | `POST <kind>s/{id}/validate` | destructive: final reference |
 | `dolibarr_request` | any method and path | destructive |
 
@@ -38,6 +38,11 @@ generates for them, which its `documents` API serves and no tool covers yet.
   into `[]`; the other lists answer `200` and `[]`. Any other `404` stays an
   error: Dolibarr serves the routes of enabled modules only.
 - A `POST` that creates an object returns its numeric id.
+- One line is added with `POST proposals/{id}/line` but `POST orders/{id}/lines`
+  and `invoices/{id}/lines`: `proposals/{id}/lines` takes a list of lines.
+- A third party is created with `code_client` / `code_fournisseur` set to
+  `auto`: Dolibarr numbers the code when its code module requires one (as the
+  demo data does), and leaves it empty otherwise.
 - Dates are Unix timestamps; `create_sales_document` sends noon UTC of the given
   day, so the date is right in any server time zone.
 - `sqlfilters` values sit in single quotes and can't escape one: `like()`

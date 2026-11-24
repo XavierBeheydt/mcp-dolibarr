@@ -22,7 +22,9 @@ async def test_create_thirdparty_sets_the_role_flags(connect, dolibarr: MockDoli
     dolibarr.on("GET", "thirdparties/7", {"id": "7", "name": "ACME"})
     async with connect(allow_write=True) as client:
         created = await call(client, "create_thirdparty", name="ACME", role="supplier", zip=None)
-    assert dolibarr.bodies("POST") == [{"name": "ACME", "fournisseur": 1}]
+    assert dolibarr.bodies("POST") == [
+        {"name": "ACME", "fournisseur": 1, "code_fournisseur": "auto"}
+    ]
     assert created == {"id": "7", "name": "ACME"}
 
 

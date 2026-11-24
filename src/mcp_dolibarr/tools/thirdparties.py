@@ -11,10 +11,11 @@ from . import CREATE, READ, Limit, Page, as_json, like
 Role = Literal["customer", "prospect", "supplier"]
 
 _MODES = {"customer": 1, "prospect": 2, "supplier": 4}
+# "auto" numbers the code when the customer or supplier code module requires one.
 _ROLE_FIELDS = {
-    "customer": {"client": 1},
-    "prospect": {"client": 2},
-    "supplier": {"fournisseur": 1},
+    "customer": {"client": 1, "code_client": "auto"},
+    "prospect": {"client": 2, "code_client": "auto"},
+    "supplier": {"fournisseur": 1, "code_fournisseur": "auto"},
 }
 _SUMMARY = "id,name,name_alias,code_client,code_fournisseur,email,phone,town,client,fournisseur"
 
