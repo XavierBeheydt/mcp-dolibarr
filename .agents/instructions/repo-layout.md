@@ -10,7 +10,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `tests/` | pytest tests, one `test_<module>.py` per module; Dolibarr is mocked in `conftest.py` |
 | `tests/tools/` | The tests of the MCP tools, one `test_<resource>.py` per `src/mcp_dolibarr/tools/<resource>.py` |
 | `docs/` | Documentation (Markdown); no plans or roadmaps, those live in issues |
-| `.github/` | GitHub configuration: `workflows/` (CI in `ci.yml`, publishing in `release.yml`) |
+| `.github/` | GitHub configuration: `workflows/` (CI in `ci.yml`, publishing in `release.yml`, the weekly Dolibarr API watch in `dolibarr-api.yml`, the integration tests in `integration.yml`) and `dolibarr-api-version` (the Dolibarr release the tools were last checked against) |
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
 | `.worktrees/` | Git worktrees, ignored by git (see `repo-workflow.md`) |
 
